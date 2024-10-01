@@ -26,8 +26,10 @@ public class UserMealsUtil {
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         HashMap<LocalDate, Integer> byDateCalories = new HashMap<>();
-        meals.forEach(um -> byDateCalories.put(um.getDate(), um.getCalories() +
-                (byDateCalories.getOrDefault(um.getDate(), 0))));
+        meals.forEach(um -> {
+            byDateCalories.put(um.getDate(), um.getCalories() +
+                    (byDateCalories.getOrDefault(um.getDate(), 0)));
+        });
         List<UserMealWithExcess> result = new ArrayList<>();
         meals.forEach(um -> {
             if (TimeUtil.isBetweenHalfOpen(um.getTime(), startTime, endTime)) {
