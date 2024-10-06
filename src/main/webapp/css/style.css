@@ -1,0 +1,43 @@
+
+.list-table {
+    width: 100%;
+    border-spacing: 0;
+    border-style: solid;
+    text-align: center;
+    box-shadow: 0 0 50px;
+}
+
+.t-header {
+    font-family: Roboto, serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 19px;
+    height: 70px;
+    color: white;
+    background: grey;
+}
+
+.t-row-with-excess {
+    font-family: Roboto, serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    height: 70px;
+    color: red;
+    background: white;
+    text-align: center;
+}
+
+.t-row-without-excess {
+    font-family: Roboto, serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    height: 70px;
+    color: green;
+    background: white;
+    text-align: center;
+}
