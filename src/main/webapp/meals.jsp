@@ -11,6 +11,9 @@
 <head>
     <link rel="stylesheet" href="css/style.css">
     <title>Список приемов пищи</title>
+    <a href="meals?action=add">
+        Add meal
+    </a>
 </head>
 <body>
 <div>
@@ -19,6 +22,8 @@
             <th>Дата приема пищи</th>
             <th>Описание еды</th>
             <th>Кол-во калорий</th>
+            <th></th>
+            <th></th>
         </tr>
         <jsp:useBean id="mealsTo" scope="request" type="java.util.List"/>
         <c:forEach items="${mealsTo}" var="mealTo">
@@ -33,6 +38,16 @@
                 </td>
                 <td>
                         ${mealTo.calories}
+                </td>
+                <td>
+                    <a href="meals?id=${mealTo.id}&action=update">
+                        Update
+                    </a>
+                </td>
+                <td>
+                    <a href="meals?id=${mealTo.id}&action=delete">
+                        Delete
+                    </a>
                 </td>
             </tr>
         </c:forEach>
