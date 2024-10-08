@@ -1,11 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Dmitry Zaitsev
-  Date: 10/6/2024
-  Time: 9:56 PM
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"  %>
 <html>
 <head>
     <title>Edit meal</title>
@@ -15,10 +8,12 @@
 <div>
     <form method="post" action="meals" enctype="application/x-www-form-urlencoded">
 
-        <input type="datetime-local" name="dateTime"
+        <input type="hidden" name="id" value="${meal.id}">
+
+        <input type="datetime-local" name="datetime"
                placeholder="Дата и время приема пищи"
                size=10
-               value="${meal.dateTime}">
+               value="${meal.dateTime}" required>
         <br>
         <input type="text" name="description" size=55 placeholder="Описание приема пищи" value="${meal.description}"
                required>

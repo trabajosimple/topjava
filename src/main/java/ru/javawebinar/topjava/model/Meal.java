@@ -7,13 +7,14 @@ import java.time.LocalTime;
 public class Meal {
 
     public static final Meal EMPTY = new Meal();
-    private int id;
+    public static final int EMPTY_ID = -1;
+    private final int id;
 
-    private LocalDateTime dateTime;
+    private final LocalDateTime dateTime;
 
-    private String description;
+    private final String description;
 
-    private int calories;
+    private final int calories;
 
     public Meal(int id, LocalDateTime dateTime, String description, int calories) {
         this.id = id;
@@ -23,6 +24,7 @@ public class Meal {
     }
 
     public Meal() {
+        this.id = EMPTY_ID;
         this.dateTime = LocalDateTime.now();
         this.description = "Укажите прием пищи";
         this.calories = 0;

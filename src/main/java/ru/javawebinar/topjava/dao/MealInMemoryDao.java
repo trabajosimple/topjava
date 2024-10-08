@@ -5,7 +5,6 @@ import ru.javawebinar.topjava.model.MealTo;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,30 +13,9 @@ import static ru.javawebinar.topjava.util.MealsUtil.CALORIES_PER_DAY_LIMIT;
 import static ru.javawebinar.topjava.util.MealsUtil.filteredByStreams;
 
 public class MealInMemoryDao implements MealDao {
-    static private final ConcurrentHashMap<Integer, Meal> meals = new ConcurrentHashMap<>();
-    static private volatile int nextId = 1;
-    static {
-        int id = getNextId();
-        meals.put(id, new Meal(id, LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак",
-                500));
-        id = getNextId();
-        meals.put(id, new Meal(id, LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000));
-        id = getNextId();
-        meals.put(id, new Meal(id, LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин",
-                500));
-        id = getNextId();
-        meals.put(id, new Meal(id, LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на " +
-                "граничное " +
-                "значение", 100));
-        id = getNextId();
-        meals.put(id, new Meal(id, LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак",
-                1000));
-        id = getNextId();
-        meals.put(id, new Meal(id, LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500));
-        id = getNextId();
-        meals.put(id, new Meal(id, LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0),
-                "Ужин", 410));
-    }
+    private final ConcurrentHashMap<Integer, Meal> meals = new ConcurrentHashMap<>();
+    private volatile int nextId = 1;
+
     @Override
     public void addMeal(LocalDateTime dateTime, String description, int calories) {
         int id = getNextId();
@@ -60,8 +38,8 @@ public class MealInMemoryDao implements MealDao {
     }
 
     public List<MealTo> getAllMealsTo() {
-        return filteredByStreams(getAllMeals(), LocalTime.of(0, 0),
-                LocalTime.of(23, 59), CALORIES_PER_DAY_LIMIT);
+        return filteredByStreams(getAllMeals(), LocalTime.MIN,
+                LocalTime.MAX, CALORIES_PER_DAY_LIMIT);
     }
 
     @Override
@@ -69,7 +47,7 @@ public class MealInMemoryDao implements MealDao {
         return meals.get(id);
     }
 
-    private static synchronized int getNextId() {
+    private synchronized int getNextId() {
         return nextId++;
     }
 }
