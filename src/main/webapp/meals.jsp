@@ -14,14 +14,6 @@
         .excess {
             color: red;
         }
-
-        table, th, td {
-            border: 1px solid black;
-        }
-
-        th, td {
-            padding: 8px;
-        }
     </style>
 </head>
 <body>
@@ -31,7 +23,7 @@
     <h2>Meals</h2>
     <a href="meals?action=create">Add Meal</a>
     <br><br>
-    <table>
+    <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>
             <th>Date</th>
