@@ -1,6 +1,8 @@
 package ru.javawebinar.topjava.model;
 
-public abstract class AbstractBaseEntity {
+import java.util.Objects;
+
+public abstract class AbstractBaseEntity  {
     protected Integer id;
 
     protected AbstractBaseEntity(Integer id) {
@@ -23,4 +25,18 @@ public abstract class AbstractBaseEntity {
     public String toString() {
         return getClass().getSimpleName() + ":" + id;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractBaseEntity that = (AbstractBaseEntity) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 }

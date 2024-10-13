@@ -4,8 +4,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
-import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
-
 public class User extends AbstractNamedEntity {
 
     private String email;
@@ -20,11 +18,17 @@ public class User extends AbstractNamedEntity {
 
     private int caloriesPerDay;
 
-    public User(Integer id, String name, String email, String password, Role... roles) {
-        this(id, name, email, password, DEFAULT_CALORIES_PER_DAY, true, Arrays.asList(roles));
+    public User(String name, String email, String password,  Integer caloriesPerDay,
+                Role... roles) {
+        this(null, name, email, password, caloriesPerDay, true, Arrays.asList(roles));
+    }
+    public User(Integer id, String name, String email, String password,  Integer caloriesPerDay,
+                Role...roles) {
+        this(id, name, email, password, caloriesPerDay, true, Arrays.asList(roles));
     }
 
-    public User(Integer id, String name, String email, String password, int caloriesPerDay, boolean enabled, Collection<Role> roles) {
+    public User(Integer id, String name, String email, String password, int caloriesPerDay,
+                boolean enabled, Collection<Role> roles) {
         super(id, name);
         this.email = email;
         this.password = password;
@@ -74,7 +78,8 @@ public class User extends AbstractNamedEntity {
     }
 
     public void setRoles(Collection<Role> roles) {
-        this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
+        this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) :
+                EnumSet.copyOf(roles);
     }
 
     public String getPassword() {
