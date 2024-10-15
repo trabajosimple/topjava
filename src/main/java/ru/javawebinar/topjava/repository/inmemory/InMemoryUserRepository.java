@@ -7,24 +7,24 @@ import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
-import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryUserRepository implements UserRepository {
+    private static final Logger log = LoggerFactory.getLogger(InMemoryUserRepository.class);
     private final Map<Integer, User> repository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
-    private static final Logger log = LoggerFactory.getLogger(InMemoryUserRepository.class);
-
     {
         save(new User("petrov", "petrov@mailw.ru", "password", 2000, Role.USER));
         save(new User("ivanov", "ivanov@mailw.ru", "password", 2000, Role.ADMIN));
         save(new User("petrov", "petrov1@mailw.ru", "password", 2000, Role.USER));
         save(new User("sidorov", "sidorov@mailw.ru", "password", 2000, Role.USER, Role.ADMIN));
     }
-
     @Override
     public boolean delete(int id) {
         log.info("delete {}", id);
@@ -50,13 +50,13 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     @Override
-    public Collection<User> getAll() {
+    public List<User> getAll() {
         log.info("getAll");
         return repository.values()
                 .stream()
-                .sorted()
+                .sorted(Comparator.comparing(User::getName).thenComparing(User::getEmail))
                 .distinct()
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override

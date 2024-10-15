@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
@@ -24,21 +23,18 @@ public class MealServlet extends HttpServlet {
     private MealRepository repository;
 
     @Override
-    public void init() throws ServletException {
-        super.init();
-        repository = new InMemoryMealRepository(new InMemoryUserRepository());
+    public void init()  {
+        repository = new InMemoryMealRepository();
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
-
         Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")), SecurityUtil.authUserId());
-
         log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
         repository.save(meal, SecurityUtil.authUserId());
         response.sendRedirect("meals");
@@ -47,7 +43,6 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-
         switch (action == null ? "all" : action) {
             case "delete":
                 int id = getId(request);
@@ -67,7 +62,7 @@ public class MealServlet extends HttpServlet {
             default:
                 log.info("getAll");
                 request.setAttribute("meals",
-                        MealsUtil.getTos(repository.getAll(),
+                        MealsUtil.getTos(repository.getAll(SecurityUtil.authUserId()),
                                 MealsUtil.DEFAULT_CALORIES_PER_DAY));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;

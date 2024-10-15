@@ -1,6 +1,6 @@
 package ru.javawebinar.topjava.model;
 
-public abstract class AbstractNamedEntity extends AbstractBaseEntity implements Comparable<AbstractNamedEntity> {
+public abstract class AbstractNamedEntity extends AbstractBaseEntity  {
 
     protected String name;
 
@@ -22,8 +22,4 @@ public abstract class AbstractNamedEntity extends AbstractBaseEntity implements 
         return super.toString() + '(' + name + ')';
     }
 
-    @Override
-    public int compareTo(AbstractNamedEntity object) {
-        return getName().compareTo(object.getName());
-    }
 }

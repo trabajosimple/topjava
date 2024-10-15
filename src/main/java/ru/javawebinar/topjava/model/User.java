@@ -18,12 +18,13 @@ public class User extends AbstractNamedEntity {
 
     private int caloriesPerDay;
 
-    public User(String name, String email, String password,  Integer caloriesPerDay,
+    public User(String name, String email, String password, Integer caloriesPerDay,
                 Role... roles) {
         this(null, name, email, password, caloriesPerDay, true, Arrays.asList(roles));
     }
-    public User(Integer id, String name, String email, String password,  Integer caloriesPerDay,
-                Role...roles) {
+
+    public User(Integer id, String name, String email, String password, Integer caloriesPerDay,
+                Role... roles) {
         this(id, name, email, password, caloriesPerDay, true, Arrays.asList(roles));
     }
 
