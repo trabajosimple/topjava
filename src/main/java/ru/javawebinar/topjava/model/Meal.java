@@ -10,18 +10,16 @@ import java.time.LocalTime;
 
 @NamedQueries({
         @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id=:id AND m.user.id=:userId"),
-        @NamedQuery(name = Meal.UPDATE, query = "UPDATE Meal m " +
-                "SET m.dateTime = :dateTime, " +
-                "m.calories = :calories," +
-                "m.description = :description " +
-                "WHERE m.id = :id AND m.user.id = :userId"),
         @NamedQuery(name = Meal.BY_ID_AND_USERID, query = "SELECT m FROM Meal m WHERE m.id=:id AND m.user.id=:userId"),
-        @NamedQuery(name = Meal.ALL_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime" +
-                " DESC"),
-        @NamedQuery(name = Meal.ALL_BETWEEN_HALF_OPEN, query = "SELECT m FROM Meal m WHERE m.user.id=:userId AND m" +
-                ".dateTime >= :startDateTime" +
-                " AND m.dateTime < :endDateTime" +
-                " ORDER BY m.dateTime DESC")
+        @NamedQuery(name = Meal.ALL_SORTED, query = """
+                                                    SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC 
+                                                    """),
+        @NamedQuery(name = Meal.ALL_BETWEEN_HALF_OPEN, query = """
+                                                               SELECT m FROM Meal m 
+                                                               WHERE m.user.id=:userId AND m.dateTime >= :startDateTime
+                                                               AND m.dateTime < :endDateTime
+                                                               ORDER BY m.dateTime DESC
+                                                               """)
 })
 @Entity
 @Table(name = "meal",
@@ -34,6 +32,7 @@ public class Meal extends AbstractBaseEntity {
     public static final String BY_ID_AND_USERID = "Meal.getByIdAndUserId";
     public static final String ALL_SORTED = "Meal.getAllSorted";
     public static final String ALL_BETWEEN_HALF_OPEN = "Meal.getBetweenHalfOpen";
+
     @Column(name = "date_time", nullable = false)
     @NotNull
     private LocalDateTime dateTime;
@@ -47,7 +46,8 @@ public class Meal extends AbstractBaseEntity {
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
+    @NotNull
     private User user;
 
     public Meal() {

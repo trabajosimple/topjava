@@ -27,18 +27,7 @@ public class JpaMealRepository implements MealRepository {
             em.persist(meal);
             return meal;
         } else {
-             if(em.createNamedQuery(Meal.UPDATE)
-                     .setParameter("id", meal.getId())
-                     .setParameter("userId", userId)
-                     .setParameter("calories", meal.getCalories())
-                     .setParameter("description", meal.getDescription())
-                     .setParameter("dateTime", meal.getDateTime())
-                    .executeUpdate() != 0) {
-                 return meal;
-             } else {
-                 return null;
-             }
-//            return em.merge(meal);
+            return get(meal.id(), userId) == null ? null : em.merge(meal);
         }
     }
 
@@ -53,11 +42,8 @@ public class JpaMealRepository implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        List<Meal> meals = em.createNamedQuery(Meal.BY_ID_AND_USERID, Meal.class)
-                .setParameter("id", id)
-                .setParameter("userId", userId)
-                .getResultList();
-        return DataAccessUtils.singleResult(meals);
+        Meal meal = em.find(Meal.class, id);
+        return meal != null && meal.getUser().getId() == userId ? meal : null;
     }
 
     @Override
