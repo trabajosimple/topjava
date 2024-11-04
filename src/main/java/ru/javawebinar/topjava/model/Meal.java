@@ -12,23 +12,19 @@ import java.time.LocalTime;
         @NamedQuery(name = Meal.DELETE, query = "DELETE FROM Meal m WHERE m.id=:id AND m.user.id=:userId"),
         @NamedQuery(name = Meal.BY_ID_AND_USERID, query = "SELECT m FROM Meal m WHERE m.id=:id AND m.user.id=:userId"),
         @NamedQuery(name = Meal.ALL_SORTED, query = """
-                                                    SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC 
-                                                    """),
+                                                    SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC"""),
         @NamedQuery(name = Meal.ALL_BETWEEN_HALF_OPEN, query = """
-                                                               SELECT m FROM Meal m 
+                                                               SELECT m FROM Meal m
                                                                WHERE m.user.id=:userId AND m.dateTime >= :startDateTime
                                                                AND m.dateTime < :endDateTime
-                                                               ORDER BY m.dateTime DESC
-                                                               """)
-})
+                                                               ORDER BY m.dateTime DESC""")
+             })
 @Entity
 @Table(name = "meal",
         indexes = @Index(name = "meal_unique_user_datetime_idx", columnList = "user_id, date_time", unique = true))
 public class Meal extends AbstractBaseEntity {
 
     public static final String DELETE = "Meal.delete";
-    public static final String UPDATE = "Meal.update";
-
     public static final String BY_ID_AND_USERID = "Meal.getByIdAndUserId";
     public static final String ALL_SORTED = "Meal.getAllSorted";
     public static final String ALL_BETWEEN_HALF_OPEN = "Meal.getBetweenHalfOpen";
@@ -82,10 +78,6 @@ public class Meal extends AbstractBaseEntity {
 
     public LocalTime getTime() {
         return dateTime.toLocalTime();
-    }
-
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
     }
 
     public void setDescription(String description) {
