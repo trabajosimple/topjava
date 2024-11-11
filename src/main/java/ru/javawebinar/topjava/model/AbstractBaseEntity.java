@@ -1,10 +1,11 @@
 package ru.javawebinar.topjava.model;
 
-import org.hibernate.Hibernate;
 import org.springframework.data.domain.Persistable;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
+
+import static org.hibernate.proxy.HibernateProxyHelper.getClassWithoutInitializingProxy;
 
 @MappedSuperclass
 // http://stackoverflow.com/questions/594597/hibernate-annotations-which-is-better-field-or-property-access
@@ -14,6 +15,7 @@ public abstract class AbstractBaseEntity implements Persistable<Integer> {
 
     @Id
     @SequenceGenerator(name = "global_seq", sequenceName = "global_seq", allocationSize = 1, initialValue = START_SEQ)
+    //    @Column(name = "id", unique = true, nullable = false, columnDefinition = "integer default nextval('global_seq')")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq")
 //  See https://hibernate.atlassian.net/browse/HHH-3718 and https://hibernate.atlassian.net/browse/HHH-12034
 //  Proxy initialization when accessing its identifier managed now by JPA_PROXY_COMPLIANCE setting
@@ -35,6 +37,7 @@ public abstract class AbstractBaseEntity implements Persistable<Integer> {
         return id;
     }
 
+    // doesn't work for hibernate lazy proxy
     public int id() {
         Assert.notNull(id, "Entity must have id");
         return id;
@@ -42,24 +45,24 @@ public abstract class AbstractBaseEntity implements Persistable<Integer> {
 
     @Override
     public boolean isNew() {
-        return this.id == null;
+        return getId() == null;
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + ":" + id;
+        return getClass().getSimpleName() + ":" + getId();
     }
 
-    //  https://jpa-buddy.com/blog/hopefully-the-final-article-about-equals-and-hashcode-for-jpa-entities-with-db-generated-ids/
+    //  https://stackoverflow.com/a/78077907/548473
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        return id != null && id.equals(((AbstractBaseEntity) o).id);
+        if (o == null || getClassWithoutInitializingProxy(this) != getClassWithoutInitializingProxy(o)) return false;
+        return getId() != null && getId().equals(((AbstractBaseEntity) o).getId());
     }
 
     @Override
-    public int hashCode() {
-        return Hibernate.getClass(this).hashCode();
+    public final int hashCode() {
+        return getClassWithoutInitializingProxy(this).hashCode();
     }
 }
